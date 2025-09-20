@@ -110,12 +110,7 @@ resource "aws_route53_record" "dns_record" {
   records = [aws_instance.web.private_ip]
 }
 
-data "aws_ami" "centos8" {
 
-  owners = ["973714476881"]
-  most_recent = true
-  name_regex = "Centos-8-DevOps-Practice"
-}
 
 ##null resource to run ansible
 resource "null_resource" "ansible_tasks" {
