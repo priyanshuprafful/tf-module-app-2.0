@@ -65,10 +65,10 @@ resource "aws_iam_role" "role1" {
 # }
 ## instance profile for ec2 attachment
 
-resource "aws_iam_instance_profile" "instance_profile" {
-  name = "${var.component}-${var.env}-test-profile"
-  role = aws_iam_role.role1.name
-}
+# resource "aws_iam_instance_profile" "instance_profile" {
+#   name = "${var.component}-${var.env}-test-profile"
+#   role = aws_iam_role.role1.name
+# }
 
 
 ## security group banana hai
@@ -103,7 +103,7 @@ resource "aws_instance" "web" {
   ami = data.aws_ami.centos8.id
   instance_type = "t3.medium"
   vpc_security_group_ids = [aws_security_group.sg.id]
-  iam_instance_profile = aws_iam_instance_profile.instance_profile.name
+  # iam_instance_profile = aws_iam_instance_profile.instance_profile.name
 
   tags = {
     Name = "${var.component}-${var.env}"
