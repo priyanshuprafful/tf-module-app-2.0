@@ -1,12 +1,15 @@
 terraform {
   required_providers {
+    null = {
+      source  = "hashicorp/null"
+      version = "3.2.3"
+    }
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"  # or latest stable version
+      version = "5.81.0"
     }
   }
-}
-
+ }
 ## policy banana hai
 resource "aws_iam_policy" "policy1" {
   name        = "${var.component}-${var.env}-ssm-parameter-policy"
