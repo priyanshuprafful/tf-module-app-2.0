@@ -8,6 +8,6 @@ terraform {
 }
 resource "null_resource" "test" {
   provisioner "local-exec" {
-    command = "echo Hello All -${var.env}"
+    command = "echo Hello All - Env - ${var.env}"
   }
 }
