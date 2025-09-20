@@ -7,7 +7,7 @@ terraform {
   }
 }
 ## policy banana hai
-resource "aws_iam_policy" "policy" {
+resource "aws_iam_policy" "policy1" {
   name        = "${var.component}-${var.env}-ssm-parameter-policy"
   path        = "/"
   description = "${var.component}-${var.env}-ssm-parameter-policy to fetch the parameters"
@@ -34,7 +34,7 @@ resource "aws_iam_policy" "policy" {
 
 ## Iam role ko attach karna hai policy se
 
-resource "aws_iam_role" "test_role" {
+resource "aws_iam_role" "role1" {
   name = "${var.component}-${var.env}-EC2-role"
 
   # Terraform's "jsonencode" function converts a
@@ -52,15 +52,89 @@ resource "aws_iam_role" "test_role" {
     ]
   })
 }
+## instance profile for ec2 attachment
+
+resource "aws_iam_instance_profile" "instance_profile" {
+  name = "${var.component}-${var.env}-test-profile"
+  role = aws_iam_role.role1.name
+}
 
 
 ## security group banana hai
+resource "aws_security_group" "sg" {
+  name = "${var.component}-${var.env}-sg"
+  description = "${var.component}-${var.env}-sg Allow TLS inbound traffic"
+
+  ingress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+
+  }
+  tags = {
+    Name = "${var.component}-${var.env}-sg"
+  }
+}
 
 
 ##ec2
 
+resource "aws_instance" "web" {
+
+  ami = data.aws_ami.centos8.id
+  instance_type = "t3.small"
+  vpc_security_group_ids = [aws_security_group.sg.id]
+  iam_instance_profile = aws_iam_instance_profile.instance_profile.name
+
+  tags = {
+    Name = "${var.component}-${var.env}-instance name"
+  }
+
+}
+
 
 ##DNS record route 53 ke liye
+resource "aws_route53_record" "dns_record" {
+  zone_id = "Z0465086RMHEURU6S6M8"
+  name = "${var.component}-${var.env}"
+  type = "A"
+  ttl = 30
+  records = [aws_instance.web.private_ip]
+}
+
+data "aws_ami" "centos8" {
+
+  owners = ["973714476881"]
+  most_recent = true
+  name_regex = "Centos-8-DevOps-Practice"
+}
 
 ##null resource to run ansible
+resource "null_resource" "ansible_tasks" {
+
+  depends_on = [aws_instance.web , aws_route53_record.dns_record]
+  provisioner "remote-exec" {
+
+    connection {
+      type = "ssh"
+      user = "centos"
+      password = "DevOps321"
+      host = aws_instance.web.public_ip
+    }
+    inline = [
+
+      "sudo labauto ansible",
+      "ansible-pull -i localhost, -U https://github.com/priyanshuprafful/roboshop-ansible-2.0 main.yml -e env=${var.env} -e role_name=${var.component}"
+
+    ]
+  }
+}
 
