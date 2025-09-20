@@ -101,7 +101,7 @@ resource "aws_security_group" "sg" {
 resource "aws_instance" "web" {
 
   ami = data.aws_ami.centos8.id
-  instance_type = "t3.small"
+  instance_type = "t3.medium"
   vpc_security_group_ids = [aws_security_group.sg.id]
   iam_instance_profile = aws_iam_instance_profile.instance_profile.name
 
