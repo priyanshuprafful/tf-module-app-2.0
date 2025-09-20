@@ -106,7 +106,7 @@ resource "aws_instance" "web" {
   iam_instance_profile = aws_iam_instance_profile.instance_profile.name
 
   tags = {
-    Name = "${var.component}-${var.env}-instance name"
+    Name = "${var.component}-${var.env}"
   }
 
 }
