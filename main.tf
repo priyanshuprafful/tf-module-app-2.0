@@ -65,10 +65,10 @@ resource "aws_iam_role" "role1" {
 # }
 ## instance profile for ec2 attachment
 
-# resource "aws_iam_instance_profile" "instance_profile" {
-#   name = "${var.component}-${var.env}-test-profile"
-#   role = aws_iam_role.role1.name
-# }
+resource "aws_iam_instance_profile" "instance_profile" {
+  name = "${var.component}-${var.env}-test-profile"
+  role = aws_iam_role.role1.name
+}
 
 
 ## security group banana hai
