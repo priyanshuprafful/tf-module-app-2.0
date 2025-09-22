@@ -36,7 +36,7 @@ resource "aws_iam_policy" "policy1" {
   })
 }
 
-## Iam role ko attach karna hai policy se
+## Iam role ko attach karna hai policy se but ye niche wala code keval role bana raha hai
 
 resource "aws_iam_role" "role1" {
   name = "${var.component}-${var.env}-EC2-role"
@@ -59,10 +59,10 @@ resource "aws_iam_role" "role1" {
 
 ## attach policy to a role
 
-# resource "aws_iam_role_policy_attachment" "policy-attach" {
-#   policy_arn = aws_iam_role.role1.arn
-#   role       = aws_iam_policy.policy1.name
-# }
+resource "aws_iam_role_policy_attachment" "policy-attach" {
+  policy_arn = aws_iam_policy.policy1.arn
+  role       = aws_iam_role.role1.name
+}
 ## instance profile for ec2 attachment
 
 resource "aws_iam_instance_profile" "instance_profile" {
