@@ -138,6 +138,7 @@ resource "null_resource" "ansible_tasks" {
     inline = [
 
       "sudo labauto ansible",
+      "sudo set-hostname -skip-apply ${var.component}",
       "ansible-pull -i localhost, -U https://github.com/priyanshuprafful/roboshop-ansible-2.0 main.yml -e env=${var.env} -e role_name=${var.component}"
 
     ]
