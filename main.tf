@@ -140,8 +140,8 @@ resource "null_resource" "ansible_tasks" {
 
       # "sudo labauto ansible",
       "sudo set-hostname -skip-apply ${var.component}",
-      "ansible-pull -i localhost, -U https://github.com/priyanshuprafful/roboshop-ansible-2.0 main.yml -e env=${var.env} -e role_name=${var.component}"
-
+      "ansible-pull -i localhost, -U https://github.com/priyanshuprafful/roboshop-ansible-2.0 main.yml -e env=${var.env} -e role_name=${var.component}",
+      "${var.component == "frontend" ? "sudo labauto prometheus-node-exporter" : "echo \"Not frontend, skipping exporter setup\""}"
     ]
   }
 }
