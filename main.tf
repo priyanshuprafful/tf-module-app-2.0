@@ -108,7 +108,7 @@ resource "aws_instance" "web" {
   tags = {
     Name = "${var.component}-${var.env}"
     monitor = var.component == "frontend" ? "yes" : null
-    environement = var.env
+    environment = var.env
   }
 
 }
