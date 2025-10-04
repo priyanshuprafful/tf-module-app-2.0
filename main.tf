@@ -107,7 +107,9 @@ resource "aws_instance" "web" {
 
   tags = {
     Name = "${var.component}-${var.env}"
-    monitor = var.component == "frontend" ? "yes" : null
+    # monitor = var.component == "frontend" ? "yes" : null
+    monitor = contains(["frontend", "user", "cart" , "catalogue" , "shipping" , "payment"], var.component) ? "yes" : null
+
     environment = var.env
   }
 
