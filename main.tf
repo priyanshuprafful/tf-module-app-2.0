@@ -105,13 +105,14 @@ resource "aws_instance" "web" {
   vpc_security_group_ids = [aws_security_group.sg.id]
   iam_instance_profile = aws_iam_instance_profile.instance_profile.name
 
-  tags = {
+  tags = merge({
     Name = "${var.component}-${var.env}"
     # monitor = var.component == "frontend" ? "yes" : null
     monitor = contains(["frontend", "user", "cart" , "catalogue" , "shipping" , "payment"], var.component) ? "yes" : null
 
     environment = var.env
-  }
+  },
+    var.tags_name)
 
 }
 
